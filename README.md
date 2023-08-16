@@ -4,12 +4,14 @@ This is my online Shop using ruby on rails, html, css, javascript.
 
 Features:
 Secure authenthication using Devise gem.
+  
 Admin Panel for managing orders, adding products, categories etc.
+  
 Working Mailer System (Needs sender email to be added):
 - customer gets notified about the status change of the order (shipping, shipped, cancelled, etc.);
 - admin gets notified of new orders, out of stock items, questions asked about products;
 - email confirm link;
-
+  
 Ability to leave reviews on ordered products as customer  
 
 Ability to ask questions about products as customer  
