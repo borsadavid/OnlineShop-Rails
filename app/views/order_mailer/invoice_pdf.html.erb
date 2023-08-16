@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ccc;
+    }
+    
+    th {
+      background-color: #f2f2f2;
+    }
+    
+    p {
+      margin-bottom: 10px;
+    }
+    
+    strong {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <% @processed_orders.group_by(&:tracking_number).each do |tracking_number, processed_orders| %>
+    <h1>Invoice for Order #<%= tracking_number %></h1>
+  <% end %>
+  
+  <% total_price = 0 %>
+  <% last_address = nil %>
+  <% last_name = nil %>
+  <% last_status = nil %>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @processed_orders.group_by(&:tracking_number).each do |_tracking_number, processed_orders| %>
+        <% processed_orders.each do |processed_order| %>
+          <tr>
+            <td><%= processed_order.product.name %></td>
+            <td><%= processed_order.product.price %></td>
+            <td><%= processed_order.quantity %></td>
+          </tr>
+          <% last_status = processed_order.status %>
+          <% total_price += processed_order.product.price * processed_order.quantity %>
+          <% last_address = processed_order.address %>
+          <% last_name = processed_order.name %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  
+  <p><strong>Shipping address:</strong> <%= last_address %></p> 
+  <p><strong>Customer:</strong> <%= last_name %></p>
+  <p><strong>Total Price:</strong> <%= total_price %> RON</p>
+</body>
+</html>

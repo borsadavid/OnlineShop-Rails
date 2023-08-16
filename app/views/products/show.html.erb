@@ -1,0 +1,341 @@
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <%= stylesheet_link_tag 'buttons' %>
+      <style>
+        ul > li{margin-right:25px;font-weight:lighter;cursor:pointer}
+        li.active{border-bottom:3px solid silver;}
+        .details {
+        border: 1.5px solid grey;
+        color: #212121;
+        width: 100%;
+        height: auto;
+        box-shadow: 0px 0px 10px #212121;
+        }
+        .item-photo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-right: 1px solid #f6f6f6;
+        width: 500px; /* Adjust the width to your desired value */
+        height: 500px; /* Adjust the height to your desired value */
+        }
+        .menu-items{list-style-type:none;font-size:18px;display:inline-flex;margin-bottom:0;margin-top:20px}
+        .title-price{margin-top:30px;margin-bottom:0;color:black}
+        .cart {
+        background-color: #212121;
+        color: white;
+        margin-top: 10px;
+        font-size: 12px;
+        font-weight: 900;
+        width: 100%;
+        height: 39px;
+        padding-top: 9px;
+        box-shadow: 0px 5px 10px  #212121;
+        }
+        @media (max-width: 426px) {
+        .container {margin-top:0px !important;}
+        .container > .row{padding:0 !important;}
+        .container > .row > .col-xs-12.col-sm-5{
+        padding-right:0 ;
+        }
+        .container > .row > .col-xs-12.col-sm-9 > div > p{
+        padding-left:0 !important;
+        padding-right:0 !important;
+        }
+        .container > .row > .col-xs-12.col-sm-9 > div > ul{
+        padding-left:10px !important;
+        }
+        .section{width:104%;}
+        .menu-items{padding-left:0;}
+        }
+
+        *{
+        margin: 0;
+        padding: 0;
+        }
+        .rate {
+        float: left;
+        height: 46px;
+        padding: 0 10px;
+        }
+        .rate:not(:checked) > input {
+        position:absolute;
+        top:-9999px;
+        }
+        .rate:not(:checked) > label {
+        float:right;
+        width:1em;
+        overflow:hidden;
+        white-space:nowrap;
+        cursor:pointer;
+        font-size:30px;
+        color:#ccc;
+        }
+        .rate:not(:checked) > label:before {
+        content: '★ ';
+        }
+        .rate > input:checked ~ label {
+        color: #900C3F;
+        }
+        .rate:not(:checked) > label:hover,
+        .rate:not(:checked) > label:hover ~ label {
+        color: #900C3F;
+        }
+        .rate > input:checked + label:hover,
+        .rate > input:checked + label:hover ~ label,
+        .rate > input:checked ~ label:hover,
+        .rate > input:checked ~ label:hover ~ label,
+        .rate > label:hover ~ input:checked ~ label {
+        color: #900C3F;
+        }
+      </style>
+  </head>
+
+<body>
+  <div class="container">
+    <div class="row">
+        
+      <div class="col-xs-4 item-photo">
+        <%= image_tag(@product.image.attached? ? @product.image : "default.jpeg", class: "product-image d-block w-100") %>
+      </div>
+      <div class="col-xs-5" style="border:0px solid gray">
+        <h3>
+          <%= @product.name %>
+        </h3>
+          <% if @product_reviews.any? { |product_review| product_review.product_id == @product.id } %>
+            <% rating = 0 %>
+            <% reviews = 0 %>
+            <% @product_reviews.each do |product_review| %>
+              <% if product_review.product_id == @product.id %> 
+                <% rating += product_review.stars %>
+                <% reviews += 1 %>  
+              <% end %>  
+            <% end %>
+                <%= render_stars(number_with_precision(rating.to_f / reviews, precision: 1)) %> <%= number_with_precision(rating.to_f / reviews, precision: 1) %>
+          <% end %>
+
+        </br>
+        <h6 class="title-price">
+          <small>Price:</small>
+        </h6>
+        <h3 style="margin-top:0px;">
+          <%= @product.price %> RON
+        </h3>
+        
+        <br></br>
+        <div class="section" style="padding-bottom:20px;">
+          <% if current_account.role == "admin" %>
+            <%= link_to 'Edit', edit_product_path(@product), class: "btn btn-primary green-button" %>
+          <%= link_to "Go to products", products_path, class: "btn btn-primary green-button" %>
+          <br>
+            <%= button_to 'Destroy', product_path(@product), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-primary limegreen-button" %>
+          </div>
+        <% else %>
+          <%= button_to "Add to Cart", { controller: "orders", action: "add_to_order", product_id: @product.id }, method: :post, class: "btn details px-auto" %>
+        <%= button_to "SHOP NOW", shop_now_orders_path(product_id: @product.id), method: :post, class: "btn cart px-auto" %>
+      </div>
+      <% end %>
+    </div>
+
+    <% if notice %>
+    <h5 style="color:#900C3F; margin-left:3%;">
+      <%= notice %>
+    </h5>
+    <% end %>
+    
+    <div class="col-xs-9">
+      <ul class="menu-items">
+        <li data-target="specifications" class="active">Specifications:</li>
+        <li data-target="reviews">Reviews:</li>
+        <li data-target="questions">Questions:</li>
+      </ul>
+      <div class="content" style="width:100%;border-top:1px solid silver;overflow:hidden;">
+        <div id="specifications" class="text-content">
+          <p style="padding:15px;">
+            <small>
+              <%= @product.description %>
+            </small>
+          </p>
+        </div>
+        
+        <!-- START of REVIEWS part-->
+
+        <div id="reviews" class="text-content" style="display: none;">
+          <div style="padding: 15px;">
+            <% if @product_reviews.any? { |product_review| product_review.product_id == @product.id && product_review.account_id == current_account.id } %>
+            <h4>Your Review:</h4>
+            <% @product_reviews.each do |product_review| %>
+                      <% if product_review.product_id == @product.id && product_review.account_id == current_account.id %>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <strong> You </strong> <%= render_stars(product_review.stars) %>
+                </h5>
+                <div class="delete-review" style="position: absolute; top:23%; right: 0;">
+                  <%= button_to "X", delete_review_path(id: product_review.id), method: :delete, data: { confirm: "Are you sure you want to delete this review?" }, class:"btn btn-danger limegreen-button" %>
+                </div>
+                <p class="card-text">
+                  </strong> <%= product_review.text %>
+                </p>
+              </div>
+            </div>
+            <% end %>
+                <% end %>
+          <% else %>
+              <h5>Leave a review:</h5>
+             <%= form_with(url: add_review_path, method: "post") do |f| %>
+            <%= f.hidden_field :product_id, value: @product.id %>
+            <div class="form-group">
+              <div class="rate">
+                <input type="radio" id="star5" name="review[stars]" value="5" />
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="review[stars]" value="4" />
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="review[stars]" value="3" />
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="review[stars]" value="2" />
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="review[stars]" value="1" />
+                <label for="star1" title="text">1 star</label>
+              </div>
+            </div>
+            <br>
+              <br>
+                <br>
+                  <div class="form-group">
+                    <%= f.label :review_text %>
+                    <%= f.text_area :review_text, class: "form-control" %>
+                  </div>
+                  <%= f.submit "Submit", class: "btn btn-primary green-button" %>
+                  <% end %>
+                
+        <% end %>
+                  <br></br>
+                  <h4>Reviews: (<%= @product_reviews.where(product_id: @product.id).count %>)</h4>
+                  <% @product_reviews.each do |product_review| %>
+                  <% if product_review.product_id == @product.id %>
+                      <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        <strong>
+                          <%= product_review.account.account_information&.first_name.presence || "Confirmed User" %>
+                        </strong> <%= render_stars(product_review.stars) %>
+                      </h5>
+                      <p class="card-text">
+                        </strong> <%= product_review.text %>
+                      </p>
+                      <% if product_review.comment.present? %>
+                      <p class="card-footer">
+                        <strong>Steals&Deals Response:</strong> <%= product_review.comment %>
+                        <% if current_account.role == 'admin' %> 
+                            <%= button_to "X", delete_comment_path(id: product_review.id), method: :delete, data: { confirm: "Are you sure you want to delete this comment?" }, class: "btn btn-danger limegreen-button", style: "position: absolute; bottom: 18px; right: 10px;" %>
+                        <% end %>
+               <% else %>
+                    <% if current_account.role == 'admin' %>
+                        <%= form_with url: add_comment_path(id: product_review.id, product_id: @product.id), method: :post, remote: true do |form| %>
+                        <%= form.text_field :comment_text, placeholder: "Enter your comment" %>
+                        <%= form.submit "Add Comment", class: "comment-button" %>
+                        <% end %>
+                    <% end %>
+              <% end %>
+                    </div>
+                  </div>
+                  <% end %>
+        <% end %>
+    
+        <% if @product_reviews.none? { |product_review| product_review.product_id == @product.id } %>
+          <p>This product has no reviews yet.</p>
+                  <% end %>
+          </div>
+        </div>
+        <!-- end of REVIEWS part-->
+
+              <div id="questions" class="text-content" style="display: none;">
+                    <p style="padding:15px;">
+                        <% if @product_questions.any? { |product_question| product_question.product_id == @product.id && product_question.account_id == current_account.id } %>
+                        <h4>Your Questions:</h4>
+                        <% @product_questions.each do |product_question| %>
+                          <% if product_question.product_id == @product.id && product_question.account_id == current_account.id %>
+                              <div class="card">
+                                <div class="card-body">
+                                  <h5 class="card-title">
+                                    <strong> You </strong>
+                                  </h5>
+                                  <div class="delete-review" style="position: absolute; top:23%; right: 0;">
+                                    <%= button_to "X", delete_review_path(id: product_question.id), method: :delete, data: { confirm: "Are you sure you want to delete this review?" }, class:"btn btn-danger limegreen-button" %>
+                                  </div>
+                                  <p class="card-text">
+                                    </strong> <%= product_question.text %>
+                                  </p>
+                                </div>
+                            </div>
+                        <% end %>
+                       <% end %>
+                      <% end %>
+                      <h4>Ask a question:</h4>  
+                      <%= form_with(url: add_review_path, method: "post") do |f| %>
+                        <%= f.hidden_field :product_id, value: @product.id %>
+                        <%= f.hidden_field :is_review, value: false %>
+                        <div class="form-group">
+                        <%= f.text_area :review_text, class: "form-control" %>
+                        </div>
+                        <%= f.submit "Submit", class: "btn btn-primary green-button" %>
+                        <% end %>
+                 <br></br>
+
+                <h4>Questions: (<%= @product_questions.where(product_id: @product.id).count %>)</h4>
+                <% @product_questions.each do |product_question| %>
+                 <% if product_question.product_id == @product.id %>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">
+                              <strong>
+                                <%= product_question.account.account_information&.first_name.presence || "User" %>
+                              </h5>
+                            <p class="card-text">
+                              </strong> <%= product_question.text %>
+                            </p>
+                            <% if product_question.comment.present? %>
+                            <p class="card-footer">
+                              <strong>Steals&Deals Answer:</strong> <%= product_question.comment %>
+                              <% if current_account.role == 'admin' %> 
+                              <%= button_to "X", delete_comment_path(id: product_question.id), method: :delete, data: { confirm: "Are you sure you want to delete this comment?" }, class: "btn btn-danger limegreen-button", style: "position: absolute; bottom: 18px; right: 10px;" %>
+                              <% end %>
+                 <% else %>
+                      <% if current_account.role == 'admin' %>
+                            <%= form_with url: add_comment_path(id: product_question.id, product_id: @product.id), method: :post, remote: true do |form| %>
+                            <%= form.text_field :comment_text, placeholder: "Enter your comment" %>
+                            <%= form.submit "Add Comment", class: "comment-button" %>
+                            <% end %>
+                      <% end %>
+                      <% end %>
+                          </div>
+                          </div>
+             <% end %>
+            <% end %>
+    
+        <% if @product_questions.none? { |product_question| product_question.product_id == @product.id } %>
+            <p>This product has no questions yet.</p>
+        <% end %>
+      </div>
+     </div>
+
+
+
+        <script>
+          $(document).ready(function(){
+          setTimeout(function() {
+          $("ul.menu-items > li").on("click", function(){
+          $("ul.menu-items > li").removeClass("active");
+          $(this).addClass("active");
+
+          var target = $(this).data("target");
+          $(".text-content").hide();
+          $("#" + target).show();
+          });
+          }, 100);
+          });
+        </script>
+      </body>

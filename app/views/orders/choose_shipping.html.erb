@@ -1,0 +1,124 @@
+
+<h2 style="text-align: center;">Choose shipping address</h2>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 half-height">
+      <div class="card-container">
+        <br>
+        <% if @account_information %>
+          <div class="card mb-4">
+            <div class="row no-gutters">
+              <div class="col-md-6">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <%= @account_information.first_name %> <%= @account_information.last_name %>
+                  </h5>
+                  <p class="card-text">
+                    <%= @account_information.county %>, <%= @account_information.city %><br>
+                    <%= @account_information.address %>
+                  </p>
+                  <div class="green-text">
+                    <% if @account_information.card_name == "None" %>
+                      No Credit Card Added.
+                    <% else %>
+                      Credit Card Added.
+                    <% end %>
+                  </div>
+                  <br>
+                  <%= link_to "Show this account information", account_information_path(@account_information), class: "btn btn-primary limegreen-button" %>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <% if @account_information.profile_picture.attached? %>
+                  <%= image_tag url_for(@account_information.profile_picture.variant(resize_to_fill: [200, 200])), class: "card-img-top float-right h-100" %>
+                <% else %>
+                  <div class="green-text" style="margin-top:100px; margin-left:20px">
+                    No Profile Pic
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="card-footer">
+              <%= button_to "Choose Saved Address", processed_orders_path(
+                first_name: current_account.account_information.first_name,
+                last_name: current_account.account_information.last_name,
+                country: current_account.account_information.country,
+                county: current_account.account_information.county,
+                city: current_account.account_information.city,
+                address: current_account.account_information.address
+              ), method: :post, class: "btn btn-primary green-button" %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if !current_account.account_information %>
+          <div class="card mb-4", style="margin-top: 20px;">
+            <div class="card-body">
+              <h5 class="card-title">Add your shipping address and payment card for fast and easy orders</h5>
+              <% if !current_account.account_information %>
+                <p class="card-text">Add account address and payment method for faster orders in the future</p>
+                <%= link_to "Add Account Information", new_account_information_path, class: "btn btn-primary green-button" %>
+              <% end %>
+            </div>
+            <div class="card-footer">
+              <%= button_to "Choose New Address", processed_orders_path(
+                first_name: params[:first_name],
+                last_name: params[:last_name],
+                country: params[:country],
+                county: params[:county],
+                city: params[:city],
+                address: params[:address]
+              ), method: :post, class: "btn btn-primary green-button" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="col-md-6 half-height">
+      <div class="card mb-4", style="margin-top: 23px;">
+        <div class="card-body">
+          <%= form_tag processed_orders_path do %>
+            <div class="form-group">
+              <%= label_tag :first_name, "First Name" %>
+              <%= text_field_tag :first_name, nil, class: "form-control" %>
+            </div>
+            <div class="form-group">
+              <%= label_tag :last_name, "Last Name" %>
+              <%= text_field_tag :last_name, nil, class: "form-control" %>
+            </div>
+            <div class="form-group">
+              <%= label_tag :country, "Country" %>
+              <%= text_field_tag :country, nil, class: "form-control" %>
+            </div>
+            <div class="form-group">
+              <%= label_tag :city, "City" %>
+              <%= text_field_tag :city, nil, class: "form-control" %>
+            </div>
+            <div class="form-group">
+              <%= label_tag :county, "County" %>
+              <%= text_field_tag :county, nil, class: "form-control" %>
+            </div>
+            <div class="form-group">
+              <%= label_tag :address, "Address" %>
+              <%= text_field_tag :address, nil, class: "form-control" %>
+            </div>
+            <div class="card-footer">
+              <%= button_to "Choose New Address", processed_orders_path(
+                first_name: params[:first_name],
+                last_name: params[:last_name],
+                country: params[:country],
+                county: params[:county],
+                city: params[:city],
+                address: params[:address]
+              ), method: :post, class: "btn btn-primary green-button" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= stylesheet_link_tag 'buttons' %>

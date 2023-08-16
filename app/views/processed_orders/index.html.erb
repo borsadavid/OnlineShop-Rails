@@ -1,0 +1,78 @@
+<h2 class="center-text">Placed Orders</h2>
+
+<%= button_to 'Download CSV', { action: 'generate_csv', format: :csv },class:"btn btn-primary limegreen-button", style:"margin-left:5px;" ,method: :get %>
+
+<div class="input-group">
+  <div class="row">
+    <div class="col-md-4">
+      <%= form_with url: processed_orders_path, method: :get, class: "form-inline" do |form| %>
+        <div class="form-group d-inline">
+          <%= form.text_field :search_product_table, value: params[:search_product_table], class: "form-control form-control-sm", style: "width: 200px;", placeholder: "Search by tracking number or name" %>
+        </div>
+        <div class="form-group d-inline">
+          <%= form.select :sort_by, options_for_select({ "Newest" => "newest", "Oldest" => "oldest" }, params[:sort_by]), {}, class: "form-control form-control-sm", style: "width:100px" %>
+        </div>
+        <div class="form-group d-inline">
+          <%= form.select :status, options_for_select({ "All" => nil, "Processing" => "processing", "Shipping" => "shipping", "Shipped" => "shipped", "Cancelled" => "cancelled" }, params[:status]), {}, class: "form-control form-control-sm", style: "width:100px" %>
+        </div>
+        <div class="form-group d-inline">
+          <%= form.submit "Sort", class: "btn btn-primary green-button" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Tracking Number</th>
+      <th>Product</th>
+      <th>Product Price</th>
+      <th>Quantity</th>
+      <th>Status</th>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @processed_orders.each do |tracking_number, processed_orders| %>
+      <% first_processed_order = processed_orders.first %>
+      <% delete_form = form_tag processed_order_delete_processed_orders_path(first_processed_order.id), method: :delete do %>
+        <%= hidden_field_tag :tracking_number, first_processed_order.tracking_number %>
+        <%= button_tag 'Delete', class:"btn btn-danger limegreen-button" %>
+      <% end %>
+      <% processed_orders.each_with_index do |processed_order, index| %>
+        <tr>
+          <% if index == 0 %>
+            <td rowspan="<%= processed_orders.count %>"><%= tracking_number %></td>
+            <td><%= processed_order.product.name %></td>
+            <td><%= processed_order.product.price %> RON</td>
+            <td><%= processed_order.quantity %></td>
+            <td>
+              <%= form_tag processed_order_update_status_path(processed_order_id: processed_order.id), method: :put do %>
+                <%= hidden_field_tag :tracking_number, processed_order.tracking_number %>
+                <%= select_tag :status, options_for_select(['processing', 'shipping', 'shipped', 'cancelled'], processed_order.status), class:"form-control" %>
+                <%= submit_tag 'Update', class:"btn btn-primary green-button" %>
+              <% end %>
+            </td>
+            <td><%= processed_order.name %></td>
+            <td><%= processed_order.address %></td>
+            <td><%= delete_form %></td>
+          <% else %>
+            <td><%= processed_order.product.name %></td>
+            <td><%= processed_order.product.price %> RON</td>
+            <td><%= processed_order.quantity %></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

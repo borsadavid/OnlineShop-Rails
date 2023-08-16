@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h2 {
+        color: #333333;
+      }
+
+      h4 {
+        color: #666666;
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2><%= @account_name %> asked a question.</h2>
+    <h4>Product ID: <%= @product.id %></h4>
+    <h4>Product Name:  <a href="<%= url_for(controller: 'products', action: 'show', id: @product.id) %>"><%= @product.name %></a><br></h4>
+    <h4>From Category: <%= @category_name %></h4>
+    <h2>Question: <%= @product_question.text %></h2>
+  </body>
+</html>

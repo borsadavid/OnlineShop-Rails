@@ -1,0 +1,19 @@
+<div class="allignment">
+<h2>Forgot your password?</h2>
+  
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control input" %>
+    </div>
+  <br>
+  <div class="actions">
+    <%= f.submit "Reset password", class: "btn btn-primary limegreen-button"%>
+    </div>
+<% end %>
+  <br>
+<div class="indent">
+  <%= button_to  "Back", new_account_session_path, class: "btn btn-primary green-button"%>
+  </div>
+</div>

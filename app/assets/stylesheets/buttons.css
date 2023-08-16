@@ -1,0 +1,131 @@
+<style >
+.green-border {
+    border: 3px solid #900C3F;
+}
+
+.green-button {
+    background-color: #A2A1A1;
+    border-color: black;
+    font-weight: bold;
+}
+
+.card-text {
+    color: black;
+}
+
+.green-button:hover {
+    background-color: #900C3F;
+    border-color: black;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.limegreen-button {
+    background-color: black;
+    border-color: black;
+    color: white;
+}
+
+    .limegreen-button:hover {
+        background-color: #A2A1A1;
+        border-color: black;
+        color: black;
+    }
+
+.btn-close:hover {
+    background-color: transparent;
+}
+
+.alert-custom {
+    background-color: #900C3F;
+    border-color: black;
+    color: white;
+}
+
+.btn-close {
+    background-color: transparent;
+}
+
+.custom-checkbox:checked {
+    background-color: #900C3F;
+}
+
+a, a:hover, a:focus, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 55vh;
+}
+
+.column {
+    width: 20%;
+    padding: 80px;
+    text-align: center;
+}
+
+p {
+    color: black;
+    text-align: left;
+}
+
+h1 {
+    color: black;
+    text-align: center;
+}
+
+h2 {
+    color: #900C3F;
+    text-align: left;
+}
+
+h3{
+    color:black;
+}
+
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+input {
+    border: 2px solid #900C3F;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #545551;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.column:last-child {
+    margin-left: auto;
+}
+
+.allignment {
+    text-align: left;
+}
+
+@media screen and (min-width: 768px) {
+    .indent {
+        margin-left: -300px;
+        text-align: center;
+    }
+}
+
+
+</style >

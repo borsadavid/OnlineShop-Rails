@@ -1,0 +1,61 @@
+<div class="card mb-3", style="background-color:transparent;">
+  <div class="card-header", style="color:white;">
+    Account Information Details
+  </div>
+  <div class="card-body green-text">
+    <dl class="row">
+      <dt class="col-sm-3">First Name:</dt>
+      <dd class="col-sm-9">
+        <%= @account_information.first_name %>
+      </dd>
+
+      <dt class="col-sm-3">Last Name:</dt>
+      <dd class="col-sm-9">
+        <%= @account_information.last_name %>
+      </dd>
+
+      <dt class="col-sm-3">Country:</dt>
+      <dd class="col-sm-9">
+        <%= @account_information.country %>
+      </dd>
+
+      <dt class="col-sm-3">County:</dt>
+      <dd class="col-sm-9">
+        <%= @account_information.county %>
+      </dd>
+
+      <dt class="col-sm-3">City:</dt>
+      <dd class="col-sm-9">
+        <%= @account_information.city %>
+      </dd>
+
+      <dt class="col-sm-3">Address:</dt>
+      <dd class="col-sm-9">
+        <%= @account_information.address %>
+      </dd>
+      <% if @account_information.card_name == "None" %>
+      <dt class="col-sm-3">Card:</dt>
+      <dd class="col-sm-9">
+        No Card Added
+      </dd>
+      <% else %>
+      <dt class="col-sm-3">Owner of Card:</dt>
+      <dd class="col-sm-9">
+        <%= @account_information.card_name %>
+      </dd>
+  
+      <dt class="col-sm-3">With Date:</dt>
+      <dd class="col-sm-9">
+        <%= @account_information.card_date %>
+      </dd>
+      <% end %>
+    </dl>
+  </div>
+</div>
+
+<div class="btn-group" role="group">
+  <%= link_to "Edit this account information", edit_account_information_path(@account_information), class: "btn btn-primary green-button" %>
+    <%= link_to "Return", edit_account_registration_path, class: "btn btn-primary green-button" %>
+    <%= button_to "Destroy this account information", @account_information, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger limegreen-button" %> 
+</div>
+<%= stylesheet_link_tag 'buttons' %>

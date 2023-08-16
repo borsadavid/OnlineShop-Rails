@@ -1,0 +1,58 @@
+    <div class="col-md-6 half-height">
+      <% if @processed_orders.present? %>
+        <% @processed_orders.each do |tracking_number, orders| %>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Tracking Number: <%= tracking_number %></h5>
+              <% if orders.any? %>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Product Name</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% orders.each do |order| %>
+                      <tr>
+                        <td><%= order.product.name %></td>
+                        <td><%= order.quantity %></td>
+                        <td><%= order.product.price %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+                <p class="card-text">
+                  Shipping to: <%= orders.first.address %>
+                </p>
+                <p class="card-text">
+                  For: <%= orders.first.name %>
+                </p>
+                <p class="card-text">
+                  Total: <%= orders.sum { |order| order.product.price * order.quantity } %> RON
+                </p>
+                <% if orders.any? { |order| order.status == "processing" } %>
+                  <%= button_to "Delete", processed_order_destroy_for_users_path(tracking_number: tracking_number), method: :delete, data: { confirm: "Are you sure you want to delete all orders with tracking number #{tracking_number}?" }, class: "btn btn-danger" %>
+                <% end %>
+                <p class="card-text" style="text-align: right;">
+                    Status: <%= orders.first.status %>
+                  </p>
+              <% else %>
+                <p class="card-text">No orders found for this tracking number.</p>
+              <% end %>
+            </div>
+          </div>
+          <br>
+        <% end %>
+      <% else %>
+        <div class="card">
+          <div class="card-body">
+            <p class="card-text">No processed orders found.</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+</div>
+
+<%= stylesheet_link_tag 'buttons' %>

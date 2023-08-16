@@ -1,0 +1,126 @@
+<%= form_with(model: account_information, class: "form-horizontal") do |form| %>
+  <% if account_information.errors.any? %>
+    <div class="alert alert-danger">
+      <h2><%= pluralize(account_information.errors.count, "error") %> prohibited this account_information from being saved:</h2>
+
+      <ul>
+        <% account_information.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :first_name, class: "control-label col-sm-2 green-text" %>
+    <div class="col-sm-10">
+      <%= form.text_field :first_name, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :last_name, class: "control-label col-sm-2 green-text" %>
+    <div class="col-sm-10">
+      <%= form.text_field :last_name, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+     <%= form.label :profile_picture, class: "control-label col-sm-2 green-text" %>
+     <div class="col-sm-10">
+     <%= form.file_field :profile_picture %>
+     </div>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :country, class: "control-label col-sm-2 green-text" %>
+    <div class="col-sm-10">
+      <%= form.text_field :country, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :county, class: "control-label col-sm-2 green-text" %>
+    <div class="col-sm-10">
+      <%= form.text_field :county, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :city, class: "control-label col-sm-2 green-text" %>
+    <div class="col-sm-10">
+      <%= form.text_field :city, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :address, class: "control-label col-sm-2 green-text" %>
+    <div class="col-sm-10">
+      <%= form.text_field :address, class: "form-control" %>
+    </div>
+  </div>
+
+  <!-- Add Credit Card dropdown -->
+  <div class="form-group">
+    <%= form.label :add_credit_card,"Add/Edit credit card.", class: "control-label col-sm-2 green-text" %>
+    <div class="col-sm-10">
+      <%= form.select :add_credit_card, options_for_select([['Yes', 'add_card']]), { include_blank: "No" }, class: "form-control", id: "add_credit_card_select" %>
+    </div>
+  </div>
+
+  <!-- Credit Card details fields (initially hidden) -->
+  <div id="credit_card_fields" style="display: none;">
+    <div class="form-group">
+      <%= form.label :card_number, class: "control-label col-sm-2 green-text" %>
+      <div class="col-sm-10">
+        <%= form.text_field :card_number_digest, class: "form-control", value: @account_information.card_number_digest.nil? ? "None" : "Re-Enter Card number" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :card_name, class: "control-label col-sm-2 green-text" %>
+      <div class="col-sm-10">
+        <%= form.text_field :card_name, class: "form-control",  value: @account_information.card_name.nil? ? "None" : @account_information.card_name %> 
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :card_date, class: "control-label col-sm-2 green-text" %>
+      <div class="col-sm-10">
+        <%= form.text_field :card_date, class: "form-control", value: @account_information.card_date.nil? ? "None" : @account_information.card_date %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :card_code, "CVV", class: "control-label col-sm-2 green-text"%>
+      <div class="col-sm-10">
+        <%= form.password_field :card_code_digest, class: "form-control", value: ""  %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include JavaScript code -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var addCreditCardSelect = document.getElementById('add_credit_card_select');
+      var creditCardFields = document.getElementById('credit_card_fields');
+
+      addCreditCardSelect.addEventListener('change', function() {
+        if (addCreditCardSelect.value === 'add_card') {
+          creditCardFields.style.display = 'block';
+        } else {
+          creditCardFields.style.display = 'none';
+        }
+      });
+    });
+  </script>
+
+  <%= form.hidden_field :account_id, value: current_account.id %>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <%= form.submit "Save", class: "btn btn-primary green-button" %>
+    </div>
+  </div>
+<% end %>
+<%= stylesheet_link_tag 'buttons' %>

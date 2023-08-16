@@ -1,0 +1,54 @@
+<h1 style="text-align: left;">Users</h1>
+  <table class="table table-striped table-active">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Phone Number</th>
+        <th>E-mail</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+
+    <% @users.each do |user| %>
+    <tr>
+      <td>
+        <%= user.first_name %>
+      </td>
+      <td>
+        <%= user.last_name %>
+      </td>
+      <td>
+        <%= user.phone_number %>
+      </td>
+      <td>
+        <%= user.email %>
+      </td>
+      <td>
+        <%= link_to "Show", user_path(user), class: "btn btn-sm btn-success" %>
+          <%= link_to "Edit", edit_user_path(user), class: "btn btn-sm btn-success" %>
+            <%= link_to "Delete", user_path(user), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+      </td>
+    </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col">
+      <%= link_to "New user", new_user_path, class: "btn btn-success" %><br>
+      </div>
+  </div>
+
+
+<style>
+  .table-active td {
+  color: #212529;
+  font-weight: bold;
+  }
+  .btn-success{
+  background-color:#99EB13;
+  color:white;
+  font-weight:bold;
+  }
+
+</style>

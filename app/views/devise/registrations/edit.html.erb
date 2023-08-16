@@ -1,0 +1,133 @@
+<head>
+  <style>
+    @media (max-width: 767px) {
+    .column-container {
+    flex-direction: column;
+    }
+    .column-container > div {
+    width: 100%;
+    }
+    .card-container {
+    width: 100%;
+
+    }
+    }
+    .card-container {
+    margin-left: 20px;
+
+    }
+  </style>
+</head>
+<body>
+  <div class="column-container" style="display: flex;">
+    <div style="width: 50%;">
+      <div class="card">
+        <div class="card-body">
+          <h2>
+            Edit account credentials
+          </h2>
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+          <%= render "devise/shared/error_messages", resource: resource %>
+          <div class="field">
+            <%= f.label :email %><br />
+            <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+          </div>
+          <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div>
+            Currently waiting confirmation for: <%= resource.unconfirmed_email %>
+          </div>
+          <% end %>
+            <div class="field">
+            <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+            <%= f.password_field :password, autocomplete: "new-password" %>
+            <% if @minimum_password_length %>
+                <br />
+            <em>
+              <%= @minimum_password_length %> characters minimum
+            </em>
+            <% end %>
+          </div>
+          <div class="field">
+            <%= f.label :password_confirmation %><br />
+            <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+          </div>
+          <div class="field">
+            <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+            <%= f.password_field :current_password, autocomplete: "current-password" %>
+          </div>
+          <br>
+            <div class="actions">
+              <%= f.submit "Update" , class:"btn btn-primary green-button"%>
+            </div>
+            <% end %>
+            <br>
+              <h3>Edit Personal Details</h3>
+              <%= link_to "Edit Details", account_informations_path, class: "btn btn-primary green-button"%>
+              <br>
+                <br>
+                  <h3>Close account?</h3>
+                  <div>
+                    <%= button_to "Close my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete , class: "btn btn-primary limegreen-button"%>
+                  </div>
+                </div>
+             </div>
+            </div>
+    <div class="card-container">
+      <br>
+        <% if account_information = current_account.account_information %>
+        <div class="card">
+          <div class="row no-gutters">
+            <div class="col-md-6">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <%= account_information.first_name %> <%= account_information.last_name %>
+                </h5>
+                <p class="card-text">
+                  <%= account_information.county %>, <%= account_information.city %><br>
+                    <%= account_information.address %>
+                  </p>
+                <div class="green-text">
+                  <% if account_information.card_name == "None" %>
+                    No Credit Card Added.
+                  <% else %>
+                    Credit Card Added.
+                  <% end %>
+                </div>
+                <br>
+                  <%= link_to "Show added information", account_information, class: "btn btn-primary limegreen-button" %>
+                </div>
+            </div>
+            <div class="col-md-6">
+              <% if account_information.profile_picture.attached? %>
+                <%= image_tag url_for(account_information.profile_picture.variant(resize_to_fill: [200, 200])), class: "card-img-top float-right h-100" %>
+              <% else %>
+                <div class="green-text" style="margin-top:100px; margin-left:20px">
+                No Profile Pic
+              </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <% else %>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Add your shipping address and payment card for fast and easy orders</h5>
+            <%= link_to "Add account information", new_account_information_path, class: "btn btn-primary green-button" %>
+          </div>
+        </div>
+        <% end %>
+
+        <br>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">View Placed Orders</h5>
+              <p class="card-text">Track your orders</p>
+              <%= link_to "Track your orders", processed_order_user_index_path(current_account.id), class: "btn btn-primary limegreen-button" %>
+            </div>
+          </div>
+
+        </div>
+  </div>
+  <%= stylesheet_link_tag 'buttons' %>
+</body>
+</html>

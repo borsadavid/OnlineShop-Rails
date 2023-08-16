@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<%= csrf_meta_tags %>
+<style>
+* {
+  box-sizing: border-box;
+}
+.div{
+width: 80vw;}
+.row::after {
+  content: "";
+  clear: both;
+  display: block;
+  overflow-y:hidden;
+}
+ 
+[class*="col-"] {
+  float: left;
+  padding: 15px;
+}
+ 
+ 
+ 
+.col-3 {
+  width: 15%;
+  float: left;
+  height: 100%;
+  position: fixed;
+  background-color: #A2A1A1;
+  overflow: hidden;
+  padding-top: 100px; /* add some padding to create a gap between header and left sidebar */
+}
+ 
+.col-9 {
+  width: 85%;
+  margin-left: 15%;
+  padding: 15px;
+  padding-top: 100px; /* add more padding to lower the text further down */
+}
+ 
+body{
+background-color:white;
+}
+ 
+.nav-link:hover {
+  background-color: transparent;
+  color: black;
+}
+ 
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 15%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 50%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 85%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+ 
+html {
+  font-family: "Lucida Sans", sans-serif;
+}
+ 
+.header {
+  background-color: #545551;
+  color: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-height: 8%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+}
+
+ .logo {
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+  margin-right: 10px;
+}
+
+.search-form {
+  margin-top: 6px;
+}
+
+.cart-button {
+  margin-left:40px;
+}
+
+ 
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+ 
+.menu li {
+  margin-bottom: 15px;
+  background-color: #A2A1A1;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  padding: 10px;
+  width: 100%; /* Added width property */
+  text-align: center; /* Center align the button text */
+  white-space: nowrap; /* Prevent line breaks within button text */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Show ellipsis for overflowing text */
+ 
+}
+ 
+.menu li:hover {
+  background-color: white;
+  color:black;
+}
+ 
+p{
+color: #ffffff;
+}
+ 
+h1{
+color: #ffffff;
+}
+h2{
+color: #8ACF1A;
+}
+
+.cart-button {
+  position:absolute;
+  right:10%;
+  top: 30%;
+}
+
+@media (max-width: 768px) {
+  .col-3 {
+    width: 40%;
+  }
+
+  .col-9 {
+    width: 60%;
+    margin-left: 40%;
+  }
+}
+</style>
+</head>
+<body>
+ 
+<div class="header">
+  <div class="header-inner">
+   <%= link_to main_path do %>
+  <%= image_tag("logo.png", alt: "Steals&Deals Logo", class: "logo") %>
+<% end %>
+   
+  <%= form_tag(user_view_index_path, method: :get) do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search for a product", class:"form-inline", style:"margin-top:6px;" %>
+  <%= submit_tag "Search", class:"btn btn-primary green-button" %>
+  <% end %>
+ 
+    <%= link_to orders_path, class: "btn btn-primary green-button cart-button" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+        </svg>
+                Cart   
+    <% end %>
+  </div>
+</div>
+ 
+<div class="row">
+  <div class="col-3 menu">
+    <ul>
+      <li><%=link_to "Home",main_path, class:"nav-link"%></li>
+      <li><%= link_to "Products", user_view_index_path, class: "nav-link" %></li>
+      <% if account_signed_in? %>
+      <li><%= link_to "Profile", edit_account_registration_path, class: "nav-link" %></li>
+      <% if current_account.role == "admin" %>
+      <li><%=link_to "Edit Categories",categories_path, class:"nav-link"%></li>
+      <li><%=link_to "Edit Products",products_path, class:"nav-link"%></li>
+      <li><%=link_to "Placed Orders",processed_orders_path, class:"nav-link"%></li>
+      <% end %>
+      
+      <li><%= button_to "Log Out", destroy_account_session_path, method: :delete, class: "nav-link", style: "display: block; width: 100%; height: 100%;" %>
+      <% end %>
+      <% if !account_signed_in?%>
+      <li><%=link_to "Sign In", new_account_session_path, class:"nav-link"%></li>
+      <% end %>
+    </ul>
+  </div>
+ 
+  <div class="col-9">

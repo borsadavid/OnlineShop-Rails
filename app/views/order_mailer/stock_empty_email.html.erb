@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h2 {
+        color: #333333;
+      }
+
+      h4 {
+        color: #666666;
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>A product ran out of stock</h2>
+    <h4>Product ID: <%= @product.id %></h4>
+    <h4>Product Name: <%= @product.name %></h4>
+    <h4>From Category: <%= @category_name %></h4>
+  </body>
+</html>

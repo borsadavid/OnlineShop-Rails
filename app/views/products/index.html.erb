@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1>Products</h1>
+    <% if account_signed_in? %>
+<%= link_to "Add product", new_product_path ,class: "btn btn-primary green-button"%>
+    <% end %>
+      <br></br>
+      
+      <!-- form-tag -->
+      <%= form_tag products_path, method: :get, class: "form-inline", style: "margin-left:15px;", id: "products-view-form" do %>
+      <div class="form-group mb-2">
+        <%= select_tag :category_name, options_for_select(Category.pluck(:name), params[:category_name]), include_blank: 'All', class: "form-inline" %>
+        <%= select_tag :sort_by, options_for_select({ "Price (Low to High)" => "price_asc", "Price (High to Low)" => "price_desc", "Stock (High to Low)" => "stock_desc", "Stock (Low to High)" => "stock_asc" } ,params[:sort_by]), include_blank: 'Price' ,class: "form-inline" %>
+          <%= submit_tag 'Filter', class: 'btn btn-primary mb-2 limegreen-button' %>
+      </div>
+      <% end %>
+      <!-- end of form tag-->
+     <br>
+    
+    <%== pagy_info(@pagy)%>
+    <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+<br></br>
+
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Code</th>
+          <th>Category</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+        <tr>
+          <td>
+            <%= product.name %>
+          </td>
+          <td>
+            <%= product.description %>
+          </td>
+          <td>
+            <%= product.price %>
+          </td>
+          <td>
+            <%= product.stock %>
+          </td>
+          <td>
+            <%= product.code %>
+          </td>
+          <td>
+            <%= product.category.name %>
+          </td>
+          <% if account_signed_in? %>
+          <td>
+            <%= link_to "Edit", product, class:"btn btn-primary green-button"%>
+            <%= button_to "Delete", product, method: :delete,data: { confirm: 'Are you sure?' } , class:"btn btn-primary limegreen-button"%>
+          </td>
+          <% end %>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <br>
+</div>
+</div>
+  <%= stylesheet_link_tag 'buttons' %>
+    
+

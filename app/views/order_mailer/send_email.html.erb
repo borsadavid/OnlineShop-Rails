@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Order Confirmation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ccc;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    p {
+      margin-bottom: 10px;
+    }
+
+    strong {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h1>Thank you for your order!</h1>
+        <% total_price = 0 %>
+        <% last_address = nil %>
+        <% last_name = nil %>
+        <% last_status = nil %>
+        <table>
+          <thead>
+            <tr>
+              <th>Tracking Number</th>
+              <th>Product</th>
+              <th>Product Price</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @processed_orders.group_by(&:tracking_number).each do |tracking_number, processed_orders| %>
+              <% processed_orders.each_with_index do |processed_order, index| %>
+                <tr>
+                  <% if index == 0 %>
+                    <td rowspan="<%= processed_orders.count %>"><%= tracking_number %></td>
+                    <td><%= processed_order.product.name %></td>
+                    <td><%= processed_order.product.price %></td>
+                    <td><%= processed_order.quantity %></td>
+                  <% else %>
+                    <td><%= processed_order.product.name %></td>
+                    <td><%= processed_order.product.price %></td>
+                    <td><%= processed_order.quantity %></td>
+                    <td></td>
+                    <td></td>
+                  <% end %>
+                </tr>
+                <% last_status = processed_order.status %>
+                <% total_price += processed_order.product.price * processed_order.quantity %>
+                <% last_address = processed_order.address %>
+                <% last_name = processed_order.name %>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+
+        <% if last_address && last_name %>
+          <p>Shipping to <%= last_address %> for <%= last_name %></p>
+          <p><strong>Total Price: <%= total_price %> RON</strong></p>
+          <h2>Order is currently <%= last_status %>.</h2>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

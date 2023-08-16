@@ -1,0 +1,32 @@
+<div class="card w-75 mb-3" style="background-color: grey; border: 2px solid #99EB13;">
+  <div class="card-body" style="color: black;">
+    <h5 class="card-title">
+      <%= render @user %>
+    </h5>
+    <%= link_to "Edit this user", edit_user_path(@user), class: "btn btn-sm green-button" %> |
+    <%= link_to "Back to users", users_path, class: "btn btn-sm green-button" %>
+  </div>
+</div>
+<br>
+  <%= button_to "Destroy this user", @user, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+
+
+  <style>
+  
+  .card-title{
+  color:black;
+  }
+  
+  .green-button{
+  background-color: #99EB13;
+  border-color: green;
+  font-weight:bold;
+  color:white;
+  font-wieght:bold;
+  }
+  .green-button:hover{
+  background-color: green;
+  border-color: green;
+  font-weight:bold;
+  }
+</style>

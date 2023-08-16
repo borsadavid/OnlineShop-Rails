@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #8ACF1A;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  padding: 5px;
+  width: fit-content;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  display:block;
+  text-decoration:none;
+  outline:none;
+}
+ a, a:hover, a:focus, a:active {
+      text-decoration: none;
+      color: inherit;
+ }
+
+button:hover {
+  background-color: #659708;
+}
+
+.container{
+display: flex;
+align-items: center;
+justify-content: center;
+min-height: 100vh;
+}
+
+.column {
+  width: 50%;
+  padding: 80px;
+  text-align: center;
+}
+
+body{
+background-color:#545551;
+}
+
+.header {
+  background-color: #99EB13;
+  color: #ffffff;
+  padding: 15px;
+}
+
+p{
+color: #ffffff;
+text-align:left;
+}
+
+h1{
+color: #ffffff;
+text-align:center;
+}
+h2{
+color: #8ACF1A;
+text-align:left;
+}
+
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    padding:10px;
+  }
+}
+
+input{
+  border: 2px solid #8ACF1A;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 1.2rem;
+  color:white;
+  background-color: #545551;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.column:last-child {
+  margin-left: auto;
+}
+
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="column">
+    <h1><img src="https://uvt.ro/wp-content/uploads/2020/09/Logo-emblema-UVT-Negru-12.png" alt="Logo"><br>Welcome</h1>
+  </div>
+  <div class="column">
+    <h2>Log in</h2>
+    <p>E-mail:</p>
+	<p><input type="text" id="Name" name="Name" placeholder="e-mail"></p>
+	<p>Password:</p>
+	<p><input type="password" id="pass" name="Password" placeholder="******"></p>
+	<a href="main"><button class="button">Log In</button></a>
+  </div>
+</div>
+
+</body>
+</html>
