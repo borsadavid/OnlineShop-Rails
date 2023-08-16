@@ -6,27 +6,27 @@ Features:
 Secure authenthication using Devise gem.
 Admin Panel for managing orders, adding products, categories etc.
 Working Mailer System (Needs sender email to be added):
-- customer gets notified about the status change of the order (shipping, shipped, cancelled, etc.)
-- admin gets notified of new orders, out of stock items, questions asked about products
-- email confirm link
+- customer gets notified about the status change of the order (shipping, shipped, cancelled, etc.);
+- admin gets notified of new orders, out of stock items, questions asked about products;
+- email confirm link;
 
-Ability to leave reviews on ordered products as customer;
+Ability to leave reviews on ordered products as customer  
 
-Ability to ask questions about products as customer;
+Ability to ask questions about products as customer  
 
-Ability to respond to questions or reviews as admin;
+Ability to respond to questions or reviews as admin  
 
-Shopping cart;
+Shopping cart  
 
-Product stock status;
+Product stock status  
 
-Order status tracker;
+Order status tracker  
 
-PDF Receipt;
+PDF Receipt  
 
-Fast order with data saved into account (name, email, address)
+Fast order with data saved into account (name, email, address)  
 
-XLSX orders conversion.
+XLSX orders conversion.  
 
 
 Profile customisation:
